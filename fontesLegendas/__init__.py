@@ -18,3 +18,6 @@ class FontesBase():
     def downloadLegenda(self,diretorio, arquivo):
         raise NotImplementedError
         
+    @abc.abstractmethod
+    def getNomeLegenda(self):
+        raise NotImplementedError

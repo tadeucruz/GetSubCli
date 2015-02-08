@@ -6,9 +6,21 @@ import os
 import fontesLegendas
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
+#Removendo times repetidos
+import pysrt
 
 #POG
 fontes = []
+
+def removeSubDiplicados(legendas):
+    subs = pysrt.open(legendas, encoding='iso-8859-1')
+    for i in range(len(subs)):
+        for x in range(len(subs)):
+            if (i != x and subs[i].start == subs[x].start):
+                del subs[x]
+                subs.save()
+                return True
+    return False
 
 def recursivoDiretorio(dir):
     for possivelArquivo in os.listdir(dir):
@@ -23,6 +35,9 @@ def recursivoDiretorio(dir):
                     legendaEncontrada = True
                 if legendaEncontrada:
                     f.downloadLegenda(dir,possivelArquivo)
+                    controleLoop=True
+                    while controleLoop:
+                        controleLoop = removeSubDiplicados(f.getNomeLegenda())
                     break
 
 

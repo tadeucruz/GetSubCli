@@ -12,6 +12,7 @@ class TheSubDB(FontesBase):
 
     __linkDownload = ""
     __videoHash = ""
+    __nomeLegenda = ""
 
     def getNomeFonte(self):
         return "TheSubDB"
@@ -51,3 +52,7 @@ class TheSubDB(FontesBase):
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
         with open(nomeLegenda+".srt", "wb") as local_file:
             local_file.write(response.read())
+        self.__nomeLegenda = nomeLegenda+".srt"
+        
+    def getNomeLegenda(self):
+        return self.__nomeLegenda

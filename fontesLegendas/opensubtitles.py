@@ -12,6 +12,7 @@ from fontesLegendas import FontesBase
 class OpenSubtitles(FontesBase):
 
     _linkDownload = ""
+    __nomeLegenda = ""
 
     def getNomeFonte(self):
         return "OpenSubtitles"
@@ -91,3 +92,7 @@ class OpenSubtitles(FontesBase):
 
         legenda = open(nomeLegenda+".srt","wb")
         legenda.write(file_content)
+        self.__nomeLegenda = nomeLegenda+".srt"
+        
+    def getNomeLegenda(self):
+        return self.__nomeLegenda
