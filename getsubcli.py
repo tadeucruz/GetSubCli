@@ -3,15 +3,18 @@
 
 from __future__ import print_function
 import os
-import fontesLegendas
+import datetime
+
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
+
 #Removendo times repetidos
 import pysrt
 
 #POG
 fontes = []
 
+# Procuro "times" repetidos por forçã bruta
 def removeSubDiplicados(legendas):
     subs = pysrt.open(legendas, encoding='iso-8859-1')
     for i in range(len(subs)):
@@ -44,9 +47,15 @@ def recursivoDiretorio(dir):
 def main():
     global fontes
     fontes = [TheSubDB(), OpenSubtitles()]
-    dir = "/mnt/dados/downloads/"
-    recursivoDiretorio(dir)
-    
+    dataAtual = datetime.datetime.now()
+
+    # TODO: Tenho certeza que essa não é a melhor maneira, descobrir depois qual seria
+    dataExecutarTodo = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
+
+    if dataAtual == dataExecutarTodo:
+        recursivoDiretorio("/mnt/dados/Series")
+    else:
+        recursivoDiretorio("/mnt/dados/Downloads/")
 
 if __name__ == '__main__':
     main()
