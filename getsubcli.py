@@ -10,6 +10,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
+
 #Removendo times repetidos
 import pysrt
 
@@ -55,7 +56,7 @@ def main():
     dataControle1 = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
     dataControle2 = datetime.datetime.now().replace(hour=01, minute=30, second=0, microsecond=0)
 
-    if dataAtual >= dataControle1 or dataAtual <= dataControle2:
+    if dataAtual >= dataControle1 and dataAtual <= dataControle2:
         recursivoDiretorio("/mnt/dados/Series")
     else:
         recursivoDiretorio("/mnt/dados/Downloads/")
