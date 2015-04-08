@@ -8,6 +8,7 @@ import datetime
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
 
+
 #Removendo times repetidos
 import pysrt
 
@@ -49,10 +50,10 @@ def main():
     fontes = [TheSubDB(), OpenSubtitles()]
     dataAtual = datetime.datetime.now()
 
-    # TODO: Tenho certeza que essa não é a melhor maneira, descobrir depois qual seria
-    dataExecutarTodo = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
+    dataLimite1 = datetime.datetime(hour=00, minute=00, second=0, microsecond=0)
+    dataLimite2 = datetime.datetime(hour=01, minute=00, second=0, microsecond=0)
 
-    if dataAtual == dataExecutarTodo:
+    if dataAtual >= dataLimite1 or dataAtual <= dataLimite2:
         recursivoDiretorio("/mnt/dados/Series")
     else:
         recursivoDiretorio("/mnt/dados/Downloads/")
