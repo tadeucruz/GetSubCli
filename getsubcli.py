@@ -10,14 +10,13 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
-
 #Removendo times repetidos
 import pysrt
 
 #POG
 fontes = []
 
-# Procuro "times" repetidos por forçã bruta
+# Procuro "times" repetidos por força bruta
 def removeSubDiplicados(legendas):
     subs = pysrt.open(legendas, encoding='iso-8859-1')
     for i in range(len(subs)):
