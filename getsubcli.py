@@ -13,6 +13,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
+
 #Removendo times repetidos
 import pysrt
 
