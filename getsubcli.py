@@ -4,9 +4,11 @@
 from __future__ import print_function
 import os
 import datetime
+import sys
 
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
+
 
 
 
@@ -16,6 +18,18 @@ import pysrt
 
 #POG
 fontes = []
+
+# Referencia: https://shoaibmir.wordpress.com/2009/12/14/pid-lock-file-in-python/
+def lockProc():
+    if os.access(os.path.expanduser("/tmp/.getsubcli.lock"), os.F_OK):
+        pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "r")
+        pidfile.seek(0)
+        old_pd = pidfile.readline()
+        if os.path.exists("/proc/%s" % old_pd):
+            sys.exit(1)
+    pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "w")
+    pidfile.write("%s" % os.getpid())
+    pidfile.close
 
 # Procuro "times" repetidos por forçã bruta
 def removeSubDiplicados(legendas):
@@ -62,4 +76,5 @@ def main():
         recursivoDiretorio("/mnt/dados/Downloads/")
 
 if __name__ == '__main__':
+    lockProc()
     main()
