@@ -5,12 +5,10 @@ from __future__ import print_function
 import os
 import datetime
 import sys
+import optparse
 
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
-
-
-
 
 
 
@@ -62,20 +60,32 @@ def recursivoDiretorio(dir):
                     break
 
 
-def main():
+def main(path):
+    # Lista de modulos ativos
     global fontes
     fontes = [TheSubDB(), OpenSubtitles()]
-    dataAtual = datetime.datetime.now()
 
-    # TODO: Tenho certeza que essa não é a melhor maneira, descobrir depois qual seria
-    dataControle1 = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
-    dataControle2 = datetime.datetime.now().replace(hour=01, minute=30, second=0, microsecond=0)
+    listaPath = ["/mnt/dados/Downloads/", "/mnt/dados/Series"]
 
-    if dataAtual >= dataControle1 and dataAtual <= dataControle2:
-        recursivoDiretorio("/mnt/dados/Series")
+    if path:
+        recursivoDiretorio(path)
     else:
-        recursivoDiretorio("/mnt/dados/Downloads/")
+        dataAtual = datetime.datetime.now()
+
+        # TODO: Tenho certeza que essa não é a melhor maneira, descobrir depois qual seria
+        dataControle1 = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
+        dataControle2 = datetime.datetime.now().replace(hour=01, minute=30, second=0, microsecond=0)
+
+        if dataAtual >= dataControle1 and dataAtual <= dataControle2:
+            recursivoDiretorio("/mnt/dados/Series")
+        else:
+            recursivoDiretorio("/mnt/dados/Downloads/")
 
 if __name__ == '__main__':
+    parser = optparse.OptionParser()
+    parser.add_option('-p', dest="path")
+
+    options, remainder = parser.parse_args()
+
     lockProc()
-    main()
+    main(options.path)
