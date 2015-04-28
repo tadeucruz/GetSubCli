@@ -13,6 +13,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
+
 #Removendo times repetidos
 import pysrt
 
@@ -49,6 +50,8 @@ def recursivoDiretorio(dir):
         elif possivelArquivo.endswith(".mkv") | possivelArquivo.endswith(".mp4"):
             print("Procurando legendas para o arquivo: "+possivelArquivo)
             legendaEncontrada = False
+            # Sem muito motivo, basicamente quero tentar random uma fote de legenda
+            random.shuffle(fontes)
             for f in fontes:
                 if f.procuraLegenda(os.path.join(dir, possivelArquivo)):
                     print("  - Achamos a legenda de "+possivelArquivo+" em: " + f.getNomeFonte())
@@ -65,9 +68,6 @@ def main(path):
     # Lista de modulos ativos
     global fontes
     fontes = [TheSubDB(), OpenSubtitles()]
-
-    # Sem muito motivo, basicamente quero tentar random uma fote de legenda
-    random.shuffle(fontes)
 
     listaPath = ["/mnt/dados/Downloads/", "/mnt/dados/Series"]
 
