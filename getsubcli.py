@@ -6,9 +6,11 @@ import os
 import datetime
 import sys
 import optparse
+import random
 
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
+
 
 
 #Removendo times repetidos
@@ -63,6 +65,9 @@ def main(path):
     # Lista de modulos ativos
     global fontes
     fontes = [TheSubDB(), OpenSubtitles()]
+
+    # Sem muito motivo, basicamente quero tentar random uma fote de legenda
+    random.shuffle(fontes)
 
     listaPath = ["/mnt/dados/Downloads/", "/mnt/dados/Series"]
 
