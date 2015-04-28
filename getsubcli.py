@@ -14,6 +14,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
+
 #Removendo times repetidos
 import pysrt
 
@@ -53,15 +54,26 @@ def recursivoDiretorio(dir):
             # Sem muito motivo, basicamente quero tentar random uma fote de legenda
             random.shuffle(fontes)
             for f in fontes:
-                if f.procuraLegenda(os.path.join(dir, possivelArquivo)):
+                try:
+                    achouLegenda = f.procuraLegenda(os.path.join(dir, possivelArquivo))
+                except:
+                    achouLegenda = False
+
+                if achouLegenda:
                     print("  - Achamos a legenda de "+possivelArquivo+" em: " + f.getNomeFonte())
                     legendaEncontrada = True
+
                 if legendaEncontrada:
-                    f.downloadLegenda(dir,possivelArquivo)
-                    controleLoop=True
-                    while controleLoop:
-                        controleLoop = removeSubDiplicados(f.getNomeLegenda())
-                    break
+                    downloadSucesso = False
+                    try:
+                        f.downloadLegenda(dir, possivelArquivo)
+                        controleLoop = True
+                        while controleLoop:
+                            controleLoop = removeSubDiplicados(f.getNomeLegenda())
+                        downloadSucesso = True
+                    finally:
+                        if downloadSucesso:
+                            break
 
 
 def main(path):
