@@ -6,10 +6,10 @@ import os
 import datetime
 import sys
 import optparse
-import random
 
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
+
 
 
 
@@ -52,7 +52,7 @@ def recursivoDiretorio(dir):
             print("Procurando legendas para o arquivo: "+possivelArquivo)
             legendaEncontrada = False
             # Sem muito motivo, basicamente quero tentar random uma fote de legenda
-            random.shuffle(fontes)
+            # random.shuffle(fontes)
             for f in fontes:
                 try:
                     achouLegenda = f.procuraLegenda(os.path.join(dir, possivelArquivo))
@@ -79,7 +79,7 @@ def recursivoDiretorio(dir):
 def main(path):
     # Lista de modulos ativos
     global fontes
-    fontes = [TheSubDB(), OpenSubtitles()]
+    fontes = [OpenSubtitles(), TheSubDB()]
 
     listaPath = ["/mnt/dados/Downloads/", "/mnt/dados/Series"]
 
