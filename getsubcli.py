@@ -15,6 +15,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 
 
+
 #Removendo times repetidos
 import pysrt
 
@@ -28,6 +29,7 @@ def lockProc():
         pidfile.seek(0)
         old_pd = pidfile.readline()
         if os.path.exists("/proc/%s" % old_pd):
+            print("Programa já em execução.")
             sys.exit(1)
     pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "w")
     pidfile.write("%s" % os.getpid())
@@ -100,8 +102,8 @@ def main(path):
 if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option('-p', dest="path")
-
     options, remainder = parser.parse_args()
-
+    print("Iniciando a procura de legendas.")
     lockProc()
     main(options.path)
+    print("Fim de procura de legendas.")
