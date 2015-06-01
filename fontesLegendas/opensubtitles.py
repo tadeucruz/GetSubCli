@@ -92,7 +92,7 @@ class OpenSubtitles(FontesBase):
         f.close()
         os.remove("/tmp/algo.gz")
 
-        legenda = open(nomeLegenda+".srt","wb")
+        legenda = open(nomeLegenda + ".por.srt", "wb")
         legenda.write(file_content)
         self.__nomeLegenda = nomeLegenda + ".por.srt"
         

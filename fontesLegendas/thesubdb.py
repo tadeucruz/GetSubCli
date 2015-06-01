@@ -50,7 +50,7 @@ class TheSubDB(FontesBase):
         response = urllib2.urlopen(request)
         nomeLegenda = os.path.join(diretorio,arquivo)
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
-        with open(nomeLegenda+".srt", "wb") as local_file:
+        with open(nomeLegenda + ".por.srt", "wb") as local_file:
             local_file.write(response.read())
         self.__nomeLegenda = nomeLegenda + ".por.srt"
         
