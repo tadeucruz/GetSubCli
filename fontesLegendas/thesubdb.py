@@ -5,8 +5,8 @@ import hashlib
 import os
 import urllib2
 
-
 from fontesLegendas import FontesBase
+
 
 class TheSubDB(FontesBase):
 
@@ -52,7 +52,7 @@ class TheSubDB(FontesBase):
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
         with open(nomeLegenda+".srt", "wb") as local_file:
             local_file.write(response.read())
-        self.__nomeLegenda = nomeLegenda+".srt"
+        self.__nomeLegenda = nomeLegenda + "por.srt"
         
     def getNomeLegenda(self):
         return self.__nomeLegenda

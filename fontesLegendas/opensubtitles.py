@@ -5,9 +5,11 @@
 import gzip
 import urllib2
 import xmlrpclib
-import struct, os
+import struct
+import os
 
 from fontesLegendas import FontesBase
+
 
 class OpenSubtitles(FontesBase):
 
@@ -92,7 +94,7 @@ class OpenSubtitles(FontesBase):
 
         legenda = open(nomeLegenda+".srt","wb")
         legenda.write(file_content)
-        self.__nomeLegenda = nomeLegenda+".srt"
+        self.__nomeLegenda = nomeLegenda + "por.srt"
         
     def getNomeLegenda(self):
         return self.__nomeLegenda
