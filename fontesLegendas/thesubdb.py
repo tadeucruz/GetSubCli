@@ -1,18 +1,18 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 import hashlib
 import os
 import urllib2
+import codecs
 
 from fontesLegendas import FontesBase
 
 
 class TheSubDB(FontesBase):
-
-    __linkDownload = ""
-    __videoHash = ""
-    __nomeLegenda = ""
+    _linkDownload = ""
+    _videoHash = ""
+    nomeLegenda = ""
 
     def getNomeFonte(self):
         return "TheSubDB"
@@ -37,7 +37,7 @@ class TheSubDB(FontesBase):
             if response.code == 200:
                 linguaLegendas = response.read()
                 if "pt" in linguaLegendas:
-                    self.__videoHash = videoHash
+                    self._videoHash = videoHash
                     volta = True
         except:
             pass
@@ -45,14 +45,15 @@ class TheSubDB(FontesBase):
         return volta
 
     def downloadLegenda(self, diretorio, arquivo):
-        request = urllib2.Request('http://api.thesubdb.com/?action=download&hash='+str(self.__videoHash)+'&language=pt')
+        request = urllib2.Request(
+            'http://api.thesubdb.com/?action=download&hash=' + str(self._videoHash) + '&language=pt')
         request.add_header('User-Agent','SubDB/1.0 (Pyrrot/0.1; http://github.com/jrhames/pyrrot-cli)')
         response = urllib2.urlopen(request)
         nomeLegenda = os.path.join(diretorio,arquivo)
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
-        with open(nomeLegenda + ".por.srt", "wb") as local_file:
+        with codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8') as local_file:
             local_file.write(response.read())
-        self.__nomeLegenda = nomeLegenda + ".por.srt"
+        self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):
-        return self.__nomeLegenda
+        return self.nomeLegenda

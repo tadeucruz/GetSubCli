@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 #basico para api
 import gzip
@@ -7,6 +7,7 @@ import urllib2
 import xmlrpclib
 import struct
 import os
+import codecs
 
 from fontesLegendas import FontesBase
 
@@ -14,7 +15,7 @@ from fontesLegendas import FontesBase
 class OpenSubtitles(FontesBase):
 
     _linkDownload = ""
-    __nomeLegenda = ""
+    nomeLegenda = ""
 
     def getNomeFonte(self):
         return "OpenSubtitles"
@@ -92,9 +93,9 @@ class OpenSubtitles(FontesBase):
         f.close()
         os.remove("/tmp/algo.gz")
 
-        legenda = open(nomeLegenda + ".por.srt", "wb")
+        legenda = codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8')
         legenda.write(file_content)
-        self.__nomeLegenda = nomeLegenda + ".por.srt"
+        self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):
-        return self.__nomeLegenda
+        return self.nomeLegenda

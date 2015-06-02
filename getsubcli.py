@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
 import os
@@ -9,11 +9,6 @@ import optparse
 
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
-
-
-
-
-
 
 
 #Removendo times repetidos
@@ -29,15 +24,15 @@ def lockProc():
         pidfile.seek(0)
         old_pd = pidfile.readline()
         if os.path.exists("/proc/%s" % old_pd):
-            print("Programa j· em execuÁ„o.")
+            print("Programa j√° em execu√ß√£o.")
             sys.exit(1)
     pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "w")
     pidfile.write("%s" % os.getpid())
     pidfile.close
 
-# Procuro "times" repetidos por forÁ„ bruta
+# Procuro "times" repetidos por for√ß√£ bruta
 def removeSubDiplicados(legendas):
-    subs = pysrt.open(legendas, encoding='iso-8859-1')
+    subs = pysrt.open(legendas, encoding='utf-8')
     for i in range(len(subs)):
         for x in range(len(subs)):
             if (i != x and subs[i].start == subs[x].start):
@@ -90,7 +85,7 @@ def main(path):
     else:
         dataAtual = datetime.datetime.now()
 
-        # TODO: Tenho certeza que essa n„o È a melhor maneira, descobrir depois qual seria
+        # TODO: Tenho certeza que essa n√£o √© a melhor maneira, descobrir depois qual seria
         dataControle1 = datetime.datetime.now().replace(hour=00, minute=30, second=0, microsecond=0)
         dataControle2 = datetime.datetime.now().replace(hour=01, minute=30, second=0, microsecond=0)
 
