@@ -94,7 +94,7 @@ class OpenSubtitles(FontesBase):
         os.remove("/tmp/algo.gz")
 
         legenda = codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8')
-        legenda.write(file_content)
+        legenda.write(file_content.encode('utf-8'))
         self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):

@@ -52,7 +52,7 @@ class TheSubDB(FontesBase):
         nomeLegenda = os.path.join(diretorio,arquivo)
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
         with codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8') as local_file:
-            local_file.write(response.read())
+            local_file.write(response.read().encode('utf-8'))
         self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):
