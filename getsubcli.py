@@ -7,15 +7,12 @@ import datetime
 import sys
 import optparse
 
+import pysrt
+
 from fontesLegendas.opensubtitles import OpenSubtitles
 from fontesLegendas.thesubdb import TheSubDB
 
-
-#Removendo times repetidos
-import pysrt
-
-#POG
-fontes = []
+_fontes = []
 
 # Referencia: https://shoaibmir.wordpress.com/2009/12/14/pid-lock-file-in-python/
 def lockProc():
@@ -30,15 +27,29 @@ def lockProc():
     pidfile.write("%s" % os.getpid())
     pidfile.close
 
+
+# Referencia: http://stackoverflow.com/questions/191359/how-to-convert-a-file-to-utf-8-in-python
+def converteParaUTF8(legenda):
+    sourceEncoding = "iso-8859-1"
+    targetEncoding = "utf-8"
+    source = open(legenda)
+    novo_conteudo = unicode(source.read(), sourceEncoding).encode(targetEncoding)
+    source.close()
+    target = open(legenda, "w")
+    target.write(novo_conteudo)
+    target.close()
+
+
 # Procuro "times" repetidos por forçã bruta
-def removeSubDiplicados(legendas):
-    subs = pysrt.open(legendas, encoding='utf-8')
+def removeSubDiplicados(legenda):
+    subs = pysrt.open(legenda, encoding='iso-8859-1')
     for i in range(len(subs)):
         for x in range(len(subs)):
             if (i != x and subs[i].start == subs[x].start):
                 del subs[x]
                 subs.save()
                 return True
+    subs.save(legenda,)
     return False
 
 def recursivoDiretorio(dir):
@@ -50,7 +61,7 @@ def recursivoDiretorio(dir):
             legendaEncontrada = False
             # Sem muito motivo, basicamente quero tentar random uma fote de legenda
             # random.shuffle(fontes)
-            for f in fontes:
+            for f in _fontes:
                 try:
                     achouLegenda = f.procuraLegenda(os.path.join(dir, possivelArquivo))
                 except:
@@ -67,6 +78,7 @@ def recursivoDiretorio(dir):
                         controleLoop = True
                         while controleLoop:
                             controleLoop = removeSubDiplicados(f.getNomeLegenda())
+                        converteParaUTF8(f.getNomeLegenda())
                         downloadSucesso = True
                     finally:
                         if downloadSucesso:
@@ -75,8 +87,8 @@ def recursivoDiretorio(dir):
 
 def main(path):
     # Lista de modulos ativos
-    global fontes
-    fontes = [OpenSubtitles(), TheSubDB()]
+    global _fontes
+    _fontes = [OpenSubtitles(), TheSubDB()]
 
     listaPath = ["/mnt/dados/Downloads/", "/mnt/dados/Series"]
 

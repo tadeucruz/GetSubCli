@@ -7,7 +7,6 @@ import urllib2
 import xmlrpclib
 import struct
 import os
-import codecs
 
 from fontesLegendas import FontesBase
 
@@ -93,8 +92,8 @@ class OpenSubtitles(FontesBase):
         f.close()
         os.remove("/tmp/algo.gz")
 
-        legenda = codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8')
-        legenda.write(file_content.encode('utf-8'))
+        legenda = open(nomeLegenda + ".por.srt", "w")
+        legenda.write(file_content)
         self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):

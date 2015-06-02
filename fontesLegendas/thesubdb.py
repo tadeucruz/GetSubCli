@@ -4,7 +4,6 @@
 import hashlib
 import os
 import urllib2
-import codecs
 
 from fontesLegendas import FontesBase
 
@@ -51,8 +50,8 @@ class TheSubDB(FontesBase):
         response = urllib2.urlopen(request)
         nomeLegenda = os.path.join(diretorio,arquivo)
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
-        with codecs.open(nomeLegenda + ".por.srt", "wb", encoding='utf-8') as local_file:
-            local_file.write(response.read().encode('utf-8'))
+        with open(nomeLegenda + ".por.srt", "w") as local_file:
+            local_file.write(response.read())
         self.nomeLegenda = nomeLegenda + ".por.srt"
         
     def getNomeLegenda(self):
