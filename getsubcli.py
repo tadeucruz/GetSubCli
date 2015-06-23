@@ -38,7 +38,9 @@ class GetSubCli:
     _pathNoturno = ""
 
     def __init__(self):
+        self._parseConfiguracao()
 
+    def _parseConfiguracao(self):
         try:
             parser = ConfigParser.SafeConfigParser()
             parser.read('getsubcli.ini')
