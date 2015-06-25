@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#  -*- coding: utf-8 -*-
 
 """
     This program is free software: you can redistribute it and/or modify
@@ -43,8 +43,7 @@ class GetSubCli:
     def _parseConfiguracao(self):
         try:
             parser = ConfigParser.SafeConfigParser()
-            parser.read('getsubcli.ini')
-
+            parser.read(os.path.dirname(os.path.abspath(__file__)) + "/getsubcli.ini")
             self._modoNoturno = parser.get('GetSubCli', 'modoNoturno')
             self._path = parser.get('DIR', 'path')
             self._pathNoturno = parser.get('DIR', 'pathNoturno')
