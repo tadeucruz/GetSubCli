@@ -87,7 +87,7 @@ class GetSubCli:
         target.write(novo_conteudo)
         target.close()
 
-    # Procuro "times" repetidos por forçã bruta
+    # Procuro "times" repetidos por força bruta
     def removeSubDiplicados(self, legenda):
         subs = pysrt.open(legenda, encoding='iso-8859-1')
         for i in range(len(subs)):
@@ -100,6 +100,8 @@ class GetSubCli:
         return False
 
     def recursivoDiretorio(self, dir):
+        if os.path.exists(os.path.join(dir, ".nogetsubcli")):
+            return
         for possivelArquivo in os.listdir(dir):
             if os.path.isdir(os.path.join(dir, possivelArquivo)):
                 self.recursivoDiretorio(os.path.join(dir, possivelArquivo))
@@ -131,7 +133,6 @@ class GetSubCli:
                                 break
 
     def main(self, path):
-
         if path:
             self.recursivoDiretorio(path)
         else:
@@ -147,7 +148,6 @@ class GetSubCli:
                 self.recursivoDiretorio(self._path)
 
 if __name__ == '__main__':
-
     parser = optparse.OptionParser()
     parser.add_option('-p', dest="path")
     options, remainder = parser.parse_args()
