@@ -110,7 +110,7 @@ class GetSubCli:
                 legendaEncontrada = False
                 random.shuffle(self._fontes)
                 for f in self._fontes:
-                    print("  - Procurando em: " + f.getNomeFonte)
+                    print("  - Procurando em: " + str(f.getNomeFonte))
                     try:
                         achouLegenda = f.procuraLegenda(os.path.join(dir, possivelArquivo))
                     except:
