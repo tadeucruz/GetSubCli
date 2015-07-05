@@ -110,20 +110,22 @@ class GetSubCli:
                 legendaEncontrada = False
                 random.shuffle(self._fontes)
                 for f in self._fontes:
-                    print("  - Procurando em: " + str(f.getNomeFonte))
+                    print("  - Procurando em: " + f.getNomeFonte())
                     try:
                         achouLegenda = f.procuraLegenda(os.path.join(dir, possivelArquivo))
                     except:
                         achouLegenda = False
 
                     if achouLegenda:
-                        print("    - Achamos a legenda de " + possivelArquivo + " em: " + f.getNomeFonte())
+                        print("    - Legenda encontrada.")
                         legendaEncontrada = True
 
                     if legendaEncontrada:
                         downloadSucesso = False
                         try:
+                            print("    - Fazendo download do arquivo.")
                             f.downloadLegenda(dir, possivelArquivo)
+                            print("    - Removendo lixos do arquivo e convertendo para UTF, isso pode demorar..")
                             controleLoop = True
                             while controleLoop:
                                 controleLoop = self.removeSubDiplicados(f.getNomeLegenda())
