@@ -75,16 +75,41 @@ class GetSubCli:
     def unLockProc(self):
         os.remove("/tmp/.getsubcli.lock")
 
-    # Referencia: http://stackoverflow.com/questions/191359/how-to-convert-a-file-to-utf-8-in-python
+    # Referencia: https://gomputor.wordpress.com/2008/09/22/convert-a-file-in-utf-8-or-any-encoding-with-python/
     def converteParaUTF8(self, legenda):
-        sourceEncoding = "iso-8859-1"
-        targetEncoding = "utf-8"
-        source = open(legenda)
-        novo_conteudo = unicode(source.read(), sourceEncoding).encode(targetEncoding)
-        source.close()
-        target = open(legenda, "w")
-        target.write(novo_conteudo)
-        target.close()
+
+        conteudoLegenda = ""
+        conteudoLegendaReconhecido = ""
+
+        # Lista de possivel encodes para a leitura
+        encodings = ('utf-8-sig', 'iso-8859-1', 'windows-1253', 'iso-8859-7', 'macgreek')
+
+        # Abrindo o arquivo e lendo ele todo para a variavel conteudoLegenda
+        try:
+            conteudoLegenda = open(legenda, 'r').read()
+        except Exception:
+            print("Erro -> Ao abrir o arquivo para converter")
+
+        # Por força bruta vamos tentar descobrir qual é a codificação original do arquivo
+        for enc in encodings:
+            try:
+                conteudoLegendaReconhecido = conteudoLegenda.decode(enc)
+                break
+            except:
+                if enc == encodings[-1]:
+                    print("Erro -> Arquivo não é de um formato conhecido para fazer a conversão")
+                    sys.exit(1)
+                continue
+
+        # Sabendo a condificação original vamos salar ela para UTF-8
+        arquivoNovoLegenda = open(legenda, 'w')
+        try:
+            arquivoNovoLegenda.write(conteudoLegendaReconhecido.encode('utf-8'))
+        except Exception, e:
+            print(e)
+        finally:
+            arquivoNovoLegenda.close()
+
 
     # Procuro "times" repetidos por força bruta
     def removeSubDiplicados(self, legenda):
@@ -124,7 +149,7 @@ class GetSubCli:
                         try:
                             print("    - Fazendo download do arquivo.")
                             f.downloadLegenda(dir, possivelArquivo)
-                            print("    - Removendo lixos do arquivo e convertendo para UTF, isso pode demorar..")
+                            print("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
                             controleLoop = True
                             while controleLoop:
                                 controleLoop = self.removeSubDiplicados(f.getNomeLegenda())
