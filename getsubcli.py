@@ -22,7 +22,6 @@ import datetime
 import sys
 import optparse
 import ConfigParser
-import random
 
 import pysrt
 
@@ -108,7 +107,7 @@ class GetSubCli:
             elif possivelArquivo.endswith(".mkv") | possivelArquivo.endswith(".mp4"):
                 print("Procurando legendas para o arquivo: " + possivelArquivo)
                 legendaEncontrada = False
-                random.shuffle(self._fontes)
+                # random.shuffle(self._fontes)
                 for f in self._fontes:
                     print("  - Procurando em: " + f.getNomeFonte())
                     try:
