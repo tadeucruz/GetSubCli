@@ -140,7 +140,7 @@ class GetSubCli:
     def ordernaArquivoBuscarLegendas(self):
         entries = ((os.stat(path), path) for path in self._arquivosBuscarLegendas)
         entries = ((stat[ST_MTIME], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-        self._arquivosBuscarLegendas = entries
+        self._arquivosBuscarLegendas = sorted(entries, reverse=True)
 
     def buscaLegenda(self):
         for cdate, arquivo in self._arquivosBuscarLegendas:
