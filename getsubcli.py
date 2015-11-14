@@ -24,7 +24,7 @@ import optparse
 import os
 import sys
 import time
-from stat import S_ISREG, ST_CTIME, ST_MODE
+from stat import S_ISREG, ST_MODE, ST_MTIME
 
 import pysrt
 
@@ -139,12 +139,12 @@ class GetSubCli:
     #http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python/
     def ordernaArquivoBuscarLegendas(self):
         entries = ((os.stat(path), path) for path in self._arquivosBuscarLegendas)
-        entries = ((stat[ST_CTIME], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
+        entries = ((stat[ST_MTIME], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
         self._arquivosBuscarLegendas = entries
 
     def buscaLegenda(self):
         for cdate, arquivo in self._arquivosBuscarLegendas:
-            print("Procurando legendas para o arquivo: " + arquivo + " - " + time.ctime(cdate))
+            print("Procurando legendas para o arquivo: " + os.path.basename(arquivo) + " - " + time.ctime(cdate))
             legendaEncontrada = False
             # random.shuffle(self._fontes)
             for f in self._fontes:
