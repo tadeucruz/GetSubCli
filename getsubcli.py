@@ -23,6 +23,7 @@ import datetime
 import optparse
 import os
 import sys
+import time
 from stat import S_ISREG, ST_CTIME, ST_MODE
 
 import pysrt
@@ -139,13 +140,11 @@ class GetSubCli:
     def ordernaArquivoBuscarLegendas(self):
         entries = ((os.stat(path), path) for path in self._arquivosBuscarLegendas)
         entries = ((stat[ST_CTIME], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-        self._arquivosBuscarLegendas = []
-        for cdate, path in sorted(entries):
-            self._arquivosBuscarLegendas.append(path)
+        self._arquivosBuscarLegendas = entries
 
     def buscaLegenda(self):
-        for arquivo in self._arquivosBuscarLegendas:
-            print("Procurando legendas para o arquivo: " + arquivo)
+        for cdate, arquivo in self._arquivosBuscarLegendas:
+            print("Procurando legendas para o arquivo: " + arquivo + " - " + time.ctime(cdate))
             legendaEncontrada = False
             # random.shuffle(self._fontes)
             for f in self._fontes:
