@@ -17,6 +17,7 @@
 """
 
 import hashlib
+import httplib
 import os
 import urllib2
 
@@ -62,7 +63,12 @@ class TheSubDB(FontesBase):
         request = urllib2.Request(
             'http://api.thesubdb.com/?action=download&hash=' + str(self._videoHash) + '&language=pt')
         request.add_header('User-Agent','SubDB/1.0 (Pyrrot/0.1; http://github.com/jrhames/pyrrot-cli)')
-        response = urllib2.urlopen(request)
+
+        try:
+            response = urllib2.urlopen(request)
+        except httplib.BadStatusLine:
+            return False
+
         nomeLegenda = os.path.join(diretorio,arquivo)
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
         with open(nomeLegenda + ".por.srt", "w") as local_file:
