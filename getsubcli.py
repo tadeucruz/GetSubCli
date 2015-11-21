@@ -34,7 +34,7 @@ from fontesLegendas.thesubdb import TheSubDB
 
 class GetSubCli:
     # TODO: No futuro abilitar essa configuração no arquivo getsubcli.ini
-    _fontes = [OpenSubtitles(), TheSubDB()]
+    _fontes = [TheSubDB(), OpenSubtitles()]
     _modoNoturno = 0
     _path = ""
     _pathNoturno = ""
