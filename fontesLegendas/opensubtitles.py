@@ -18,10 +18,10 @@
 
 #basico para api
 import gzip
+import os
+import struct
 import urllib2
 import xmlrpclib
-import struct
-import os
 
 from fontesLegendas import FontesBase
 
@@ -107,7 +107,7 @@ class OpenSubtitles(FontesBase):
         f.close()
         os.remove("/tmp/algo.gz")
 
-        legenda = open(nomeLegenda + ".por.srt", "w")
+        legenda = open(nomeLegenda + ".pt-BR.srt", "w")
         legenda.write(file_content)
         self.nomeLegenda = nomeLegenda + ".por.srt"
         

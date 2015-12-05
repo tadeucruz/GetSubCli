@@ -73,7 +73,7 @@ class TheSubDB(FontesBase):
         nomeLegenda = nomeLegenda[0:len(nomeLegenda)-4]
         with open(nomeLegenda + ".por.srt", "w") as local_file:
             local_file.write(response.read())
-        self.nomeLegenda = nomeLegenda + ".por.srt"
+        self.nomeLegenda = nomeLegenda + ".pt-BR.srt"
         
     def getNomeLegenda(self):
         return self.nomeLegenda
