@@ -109,7 +109,7 @@ class OpenSubtitles(FontesBase):
 
         legenda = open(nomeLegenda + ".pt-BR.srt", "w")
         legenda.write(file_content)
-        self.nomeLegenda = nomeLegenda + ".por.srt"
+        self.nomeLegenda = nomeLegenda + ".pt-BR.srt"
         
     def getNomeLegenda(self):
         return self.nomeLegenda
