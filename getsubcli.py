@@ -210,6 +210,10 @@ class GetSubCli:
 
         self.ordernaArquivoBuscarLegendas()
         self.buscaLegenda()
+        main_thread = threading.currentThread()
+        for t in threading.enumerate():
+            if t is not main_thread:
+                t.join()
         logging.info("Fim de procura de legendas.")
 
 
