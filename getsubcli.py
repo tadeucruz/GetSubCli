@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import ConfigParser
 import datetime
+import logging
 import optparse
 import os
 import sys
@@ -38,28 +39,41 @@ class GetSubCli:
     _modoNoturno = 0
     _path = ""
     _pathNoturno = ""
+    _pathArquivoLog = ""
     _arquivosBuscarLegendas = []
 
     def __init__(self):
         self._parseConfiguracao()
+        self.logConfiguracao()
+
+    def logConfiguracao(self):
+        if (self._pathArquivoLog != ""):
+            logging.basicConfig(format='%(asctime)s %(message)s', filename=self._pathArquivoLog, filemode='w', level=logging.INFO)
+        else:
+            logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
     def _parseConfiguracao(self):
         try:
             parser = ConfigParser.SafeConfigParser()
             parser.read(os.path.dirname(os.path.abspath(__file__)) + "/getsubcli.ini")
             self._modoNoturno = parser.get('GetSubCli', 'modoNoturno')
+            try:
+                self._pathArquivoLog = parser.get('GetSubCli', 'pathArquivoLog', )
+            except ConfigParser.NoOptionError:
+                self._pathArquivoLog = ""
+
             self._path = parser.get('DIR', 'path')
             self._pathNoturno = parser.get('DIR', 'pathNoturno')
         except ConfigParser.NoSectionError as e:
-            print("Revisar o seu arquivo de configuração, esta faltando alguma Section nele: " + str(e))
+            logging.error("Revisar o seu arquivo de configuração, esta faltando alguma Section nele: " + str(e))
             sys.exit(1)
         except ConfigParser.NoOptionError as e:
-            print("Revisar o seu arquivo de configuração, esta faltando uma opção: " + str(e))
+            logging.error("Revisar o seu arquivo de configuração, esta faltando uma opção: " + str(e))
             sys.exit(1)
         except:
-            print("Erro ao ler os arquivos de configuração. Erro desconhecido: ")
+            logging.error("Erro ao ler os arquivos de configuração. Erro desconhecido: ")
             e = sys.exc_info()[0]
-            print(e)
+            logging.error(e)
             sys.exit(1)
 
     # Referencia: https://shoaibmir.wordpress.com/2009/12/14/pid-lock-file-in-python/
@@ -70,7 +84,7 @@ class GetSubCli:
             pidfile.seek(0)
             old_pd = pidfile.readline()
             if os.path.exists("/proc/%s" % old_pd):
-                print("Programa já em execução.")
+                logging.info("Programa já em execução.")
                 sys.exit(1)
         pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "w")
         pidfile.write("%s" % os.getpid())
@@ -92,7 +106,7 @@ class GetSubCli:
         try:
             conteudoLegenda = open(legenda, 'r').read()
         except Exception:
-            print("Erro -> Ao abrir o arquivo para converter")
+            logging.info("Erro -> Ao abrir o arquivo para converter")
 
         # Por força bruta vamos tentar descobrir qual é a codificação original do arquivo
         for enc in encodings:
@@ -101,7 +115,7 @@ class GetSubCli:
                 break
             except:
                 if enc == encodings[-1]:
-                    print("Erro -> Arquivo não é de um formato conhecido para fazer a conversão")
+                    logging.info("Erro -> Arquivo não é de um formato conhecido para fazer a conversão")
                     sys.exit(1)
                 continue
 
@@ -110,7 +124,7 @@ class GetSubCli:
         try:
             arquivoNovoLegenda.write(conteudoLegendaReconhecido.encode('utf-8'))
         except Exception, e:
-            print(e)
+            logging.error(e)
         finally:
             arquivoNovoLegenda.close()
 
@@ -144,26 +158,26 @@ class GetSubCli:
 
     def buscaLegenda(self):
         for cdate, arquivo in self._arquivosBuscarLegendas:
-            print("Procurando legendas para o arquivo: " + os.path.basename(arquivo) + " - " + time.ctime(cdate))
+            logging.info("Procurando legendas para o arquivo: " + os.path.basename(arquivo) + " - " + time.ctime(cdate))
             legendaEncontrada = False
             # random.shuffle(self._fontes)
             for f in self._fontes:
-                print("  - Procurando em: " + f.getNomeFonte())
+                logging.info("  - Procurando em: " + f.getNomeFonte())
                 try:
                     achouLegenda = f.procuraLegenda(os.path.join(dir, arquivo))
                 except:
                     achouLegenda = False
 
                 if achouLegenda:
-                    print("    - Legenda encontrada.")
+                    logging.info("    - Legenda encontrada.")
                     legendaEncontrada = True
 
                 if legendaEncontrada:
                     downloadSucesso = False
                     try:
-                        print("    - Fazendo download do arquivo.")
+                        logging.info("    - Fazendo download do arquivo.")
                         f.downloadLegenda(dir, arquivo)
-                        print("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
+                        logging.info("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
                         controleLoop = True
                         while controleLoop:
                             controleLoop = self.removeSubDiplicados(f.getNomeLegenda())
@@ -174,6 +188,7 @@ class GetSubCli:
                             break
 
     def main(self, path):
+        logging.info("Iniciando a procura de legendas.")
         if path:
             self.recursivoDiretorio(path)
         else:
@@ -190,6 +205,7 @@ class GetSubCli:
 
         self.ordernaArquivoBuscarLegendas()
         self.buscaLegenda()
+        logging.info("Fim de procura de legendas.")
 
 
 if __name__ == '__main__':
@@ -198,15 +214,6 @@ if __name__ == '__main__':
     options, remainder = parser.parse_args()
 
     getsubcli = GetSubCli()
-
-    print("Iniciando a procura de legendas.")
     getsubcli.lockProc()
-
-    # try:
     getsubcli.main(options.path)
     getsubcli.unLockProc()
-    # except  :
-    #    print("Algo de errado, um erro que não foi tratado")
-    #    print(sys.exc_info()[0])
-
-    print("Fim de procura de legendas.")
