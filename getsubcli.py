@@ -185,7 +185,7 @@ class GetSubCli:
                         logging.info("    - Fazendo download do arquivo.")
                         f.downloadLegenda(dir, arquivo)
                         logging.info("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
-                        t = threading.Thread(target=self.limpezaSubtitiles(f.getNomeLegenda()))
+                        t = threading.Thread(target=self.limpezaSubtitiles, args=(f.getNomeLegenda(),))
                         t.start()
                         downloadSucesso = True
                     finally:
