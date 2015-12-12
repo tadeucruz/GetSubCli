@@ -24,6 +24,7 @@ import logging
 import optparse
 import os
 import sys
+import threading
 import time
 from stat import S_ISREG, ST_MODE, ST_MTIME
 
@@ -141,6 +142,12 @@ class GetSubCli:
         subs.save(legenda, )
         return False
 
+    def limpezaSubtitiles(self,legenda):
+        controleLoop = True
+        while controleLoop:
+            controleLoop = self.removeSubDiplicados(legenda)
+        self.converteParaUTF8(legenda)
+
     def recursivoDiretorio(self, dir):
         if os.path.exists(os.path.join(dir, ".nogetsubcli")):
             return
@@ -178,10 +185,8 @@ class GetSubCli:
                         logging.info("    - Fazendo download do arquivo.")
                         f.downloadLegenda(dir, arquivo)
                         logging.info("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
-                        controleLoop = True
-                        while controleLoop:
-                            controleLoop = self.removeSubDiplicados(f.getNomeLegenda())
-                        self.converteParaUTF8(f.getNomeLegenda())
+                        t = threading.Thread(target=self.limpezaSubtitiles(f.getNomeLegenda()))
+                        t.start()
                         downloadSucesso = True
                     finally:
                         if downloadSucesso:
