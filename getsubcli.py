@@ -42,6 +42,7 @@ class GetSubCli:
     _pathNoturno = ""
     _pathArquivoLog = ""
     _arquivosBuscarLegendas = []
+    _listaThreads = []
 
     def __init__(self):
         self._parseConfiguracao()
@@ -184,8 +185,9 @@ class GetSubCli:
                     try:
                         logging.info("    - Fazendo download do arquivo.")
                         f.downloadLegenda(dir, arquivo)
-                        logging.info("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar..")
-                        t = threading.Thread(target=self.limpezaSubtitiles, args=(f.getNomeLegenda(),))
+                        logging.info("    - Removendo lixos do arquivo e convertendo para UTF-8, isso pode demorar (Rodando em Backgroud) ..")
+                        t = threading.Thread(name=f.getNomeLegenda() , target=self.limpezaSubtitiles, args=(f.getNomeLegenda(),))
+                        self._listaThreads.append(t)
                         t.start()
                         downloadSucesso = True
                     finally:
@@ -210,10 +212,19 @@ class GetSubCli:
 
         self.ordernaArquivoBuscarLegendas()
         self.buscaLegenda()
-        main_thread = threading.currentThread()
-        for t in threading.enumerate():
-            if t is not main_thread:
-                t.join()
+
+        controleThreads = True
+        while controleThreads:
+            for th in self._listaThreads:
+                if th.is_alive:
+                   logging.info("Aguardando o ajuste na legenda %s", th.getName())
+                   th.join()
+                   self._listaThreads.remove(th)
+
+            if len(self._listaThreads) == 0:
+                controleThreads = False
+
+
         logging.info("Fim de procura de legendas.")
 
 
