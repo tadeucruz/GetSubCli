@@ -50,7 +50,7 @@ class GetSubCli:
 
     def logConfiguracao(self):
         if (self._pathArquivoLog != ""):
-            logging.basicConfig(format='%(asctime)s %(message)s', filename=self._pathArquivoLog, filemode='w', level=logging.INFO)
+            logging.basicConfig(format='%(asctime)s %(message)s', filename=self._pathArquivoLog, filemode='a', level=logging.INFO)
         else:
             logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
@@ -86,7 +86,7 @@ class GetSubCli:
             pidfile.seek(0)
             old_pd = pidfile.readline()
             if os.path.exists("/proc/%s" % old_pd):
-                logging.info("Programa já em execução.")
+                logging.error("Programa já em execução.")
                 sys.exit(1)
         pidfile = open(os.path.expanduser("/tmp/.getsubcli.lock"), "w")
         pidfile.write("%s" % os.getpid())
